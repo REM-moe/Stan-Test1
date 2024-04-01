@@ -44,11 +44,11 @@ class GP_Generate:
             self.conversation_history.append({"role": "assistant", "content": response})  # Add AI response to conversation history with role 'assistant'
             print("AI:", response)
 
-# Retrieve the API key from environment variables
-api_key = os.getenv("API_KEY")
+# # Retrieve the API key from environment variables
+# api_key = os.getenv("API_KEY")
 
-# Create an instance of the Generate class
-generator = GP_Generate(api_key)
+# # Create an instance of the Generate class
+# generator = GP_Generate(api_key)
 
-# Start conversation
-generator.ask()
+# # Start conversation
+# generator.ask()
