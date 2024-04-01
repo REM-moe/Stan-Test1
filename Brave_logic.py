@@ -1,6 +1,7 @@
+import os
 import requests
 from bs4 import BeautifulSoup
-
+count=1
 def fetch_article_content(url):
     try:
         response = requests.get(url)
@@ -16,7 +17,7 @@ def fetch_article_content(url):
         print(f"An error occurred while fetching content for URL: {url}. Error: {str(e)}")
         return None
 
-def fetch_news(api_key, query, count=10, country='us', search_lang='en', spellcheck=1):         #Count used to set the number of articles generated
+def fetch_news(api_key, query, count=1, country='us', search_lang='en', spellcheck=1):         #Count used to set the number of articles generated
     url = f"https://api.search.brave.com/res/v1/news/search"
     headers = {
         "Accept": "application/json",
@@ -35,8 +36,9 @@ def fetch_news(api_key, query, count=10, country='us', search_lang='en', spellch
         news_data = response.json()
         for item in news_data.get('results', []):
             article_url = item.get('url')
+            
             if article_url:
-                count=1
+                
                 content = fetch_article_content(article_url)
                 item['content'] = content
                 print(f"-------------------------{count}----------------------------")
@@ -48,7 +50,7 @@ def fetch_news(api_key, query, count=10, country='us', search_lang='en', spellch
         return None
 
 # Example usage:
-api_key = "API KEY"             #Replace with the Brave Search api key
-query = "munich"
-news_data = fetch_news(api_key, query)
+brave_api_key = "BSA5FZ_coCBe04igRP0zZjqZBIvHudd"
+query = "Rock music"
+news_data = fetch_news(brave_api_key,query)
 #print(news_data)                                       # This will print the JSON response from the API
