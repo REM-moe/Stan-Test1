@@ -51,6 +51,6 @@ def fetch_news(api_key, query, count=1, country='us', search_lang='en', spellche
         return None
 
 # Example usage:
-api_key = "BSA5FZ_coCBe04igRP0zZjqZBIvHudd"             #Replace with the Brave Search api key
-query = "munich"
+api_key = "YOUR_KEY"             #Replace with the Brave Search api key
+query = "YOUR_QUERY"
 news_data = fetch_news(api_key, query)
