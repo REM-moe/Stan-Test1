@@ -21,6 +21,23 @@ class GP_Generate:
         self.client = OpenAI(api_key=api_key)
         self.conversation_history = []
 
+    def add_text_file_to_history(self, file_path):
+        """
+        Adds the content of a text file to the beginning of the conversation history.
+
+        Args:
+            file_path (str): The path to the text file.
+        """
+        try:
+            with open(file_path, "r", encoding="utf-8") as file:
+                content = file.read()
+                self.conversation_history.insert(0, {"role": "system", "content": content})
+                print(f"Text from file '{file_path}' added to conversation history.")
+        except FileNotFoundError:
+            print(f"File '{file_path}' not found.")
+        except Exception as e:
+            print(f"An error occurred while reading the file: {str(e)}")
+
     def ask(self):
         """
         Generates text based on the provided message using the OpenAI API.
@@ -44,11 +61,15 @@ class GP_Generate:
             self.conversation_history.append({"role": "assistant", "content": response})  # Add AI response to conversation history with role 'assistant'
             print("AI:", response)
 
-# # Retrieve the API key from environment variables
-# api_key = os.getenv("API_KEY")
+# Retrieve the API key from environment variables
+api_key = os.getenv("API_KEY")
 
-# # Create an instance of the Generate class
-# generator = GP_Generate(api_key)
+# Create an instance of the Generate class
+generator = GP_Generate(api_key)
 
-# # Start conversation
-# generator.ask()
+# Add text from the file to the beginning of the conversation history
+text_file_path = r"C:\Users\diyaa\Stan-Test1\munich_article_2.txt"  # Replace with the path to your text file
+generator.add_text_file_to_history(text_file_path)
+
+# Start conversation
+generator.ask()
