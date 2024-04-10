@@ -1,5 +1,4 @@
 from openai import OpenAI
-import os
 
 class GP_Generate:
     """
@@ -45,31 +44,16 @@ class GP_Generate:
         Returns:
             str: The generated text containing answers to user queries.
         """
-        while True:
-            message = input("\nEnter STOP to stop the program\nContinuous running will cause credit to decrease\nEnter Your Query:\n")
-            if message.upper() == "STOP":
-                break
-            query = "\nNew query: " + message
-            self.conversation_history.append({"role": "user", "content": message})  # Add user query to conversation history
-            context = [{"role": "system", "content": query}]
-            context.extend(self.conversation_history[-5:])  # Include last 5 messages in the context
-            completion = self.client.chat.completions.create(
-                model="gpt-3.5-turbo",  # Specify the GPT model
-                messages=context
-            )
-            response = completion.choices[0].message.content
-            self.conversation_history.append({"role": "assistant", "content": response})  # Add AI response to conversation history with role 'assistant'
-            print("AI:", response)
-
-# Retrieve the API key from environment variables
-api_key = os.getenv("API_KEY")
-
-# Create an instance of the Generate class
-generator = GP_Generate(api_key)
-
-# Add text from the file to the beginning of the conversation history
-text_file_path = r"C:\Users\diyaa\Stan-Test1\munich_article_2.txt"  # Replace with the path to your text file
-generator.add_text_file_to_history(text_file_path)
-
-# Start conversation
-generator.ask()
+        message = "WRITE A NEWS ARTICLE USING THE DATA I GAVE YOU 600 words include a seperate section called THE GOOD THE BAD THE GIST"
+        query = "\nNew query: " + message
+        self.conversation_history.append({"role": "user", "content": message})  # Add user query to conversation history
+        context = [{"role": "system", "content": query}]
+        context.extend(self.conversation_history[-5:])  # Include last 5 messages in the context
+        completion = self.client.chat.completions.create(
+            model="gpt-3.5-turbo",  # Specify the GPT model
+            messages=context
+        )
+        response = completion.choices[0].message.content
+        # Add AI response to conversation history with role 'assistant'
+        self.conversation_history.append({"role": "assistant", "content": response})
+        return response
