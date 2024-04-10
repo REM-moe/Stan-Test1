@@ -1,10 +1,14 @@
 from typing import Final
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from STAN import STAN
 
 # Define bot token and username
 TOKEN: Final = "YOUR_TOKEN"
 BOT_USERNAME: Final = "@trendy_reporter_bot"
+
+Brave_Key = "BRAVE KEY"
+GPT_key = "GPT KEY"
 
 class TrendyBot:
     def __init__(self, update: Update, context: ContextTypes) -> None:
@@ -48,7 +52,8 @@ Let's explore the trends together! 📈
         if len(context.args) > 0:
             # Concatenate all arguments into a single string as the query
             query = ' '.join(context.args)
-            await update.message.reply_text(f"{query} was returned")
+            satan = STAN.do_magic(query)
+            await update.message.reply_text(f"{satan} was returned")
         else:
             await update.message.reply_text("Please provide a query after the /analyze command.")
 
