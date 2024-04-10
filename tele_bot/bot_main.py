@@ -4,11 +4,9 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from STAN import STAN
 
 # Define bot token and username
-TOKEN: Final = "YOUR_TOKEN"
+TOKEN: Final = "YOUR API KEY"
 BOT_USERNAME: Final = "@trendy_reporter_bot"
 
-Brave_Key = "BRAVE KEY"
-GPT_key = "GPT KEY"
 
 class TrendyBot:
     def __init__(self, update: Update, context: ContextTypes) -> None:
@@ -48,14 +46,16 @@ Let's explore the trends together! 📈
 
     # Command to analyze user's query
     async def analyze_command(self, update: Update, context: ContextTypes):
-        # Check if there is text after the command
+        # Check if there are any arguments provided after the command
         if len(context.args) > 0:
-            # Concatenate all arguments into a single string as the query
             query = ' '.join(context.args)
-            satan = STAN.do_magic(query)
-            await update.message.reply_text(f"{satan} was returned")
+            s = STAN(query=query)
+            file_name =  s.do_magic()
+            print(file_name)
+            await update.message.reply_document(document=open(f"{file_name}", "rb"))
         else:
             await update.message.reply_text("Please provide a query after the /analyze command.")
+
 
     # Function to handle responses based on user input
     def handle_response(self, text: str) -> str:
@@ -91,22 +91,20 @@ Let's explore the trends together! 📈
     async def error(self, update: Update, context: ContextTypes):
         print(f"Update {update} caused error {context.error}")
     
-    def run(self):
-        app = Application.builder().token(TOKEN).build()
-        app.add_handler(CommandHandler('start', self.start_command() ))
-        app.add_handler(CommandHandler('help', self.help_command() ))
-        app.add_handler(CommandHandler('analyze', self.analyze_command() ))
-
-        # Register message handler
-        app.add_handler(MessageHandler(filters.TEXT, self.handle_message() ))
-
-        # Register error handler
-        app.add_error_handler(self.error() )
-
-        # Start polling for updates // checks every 1 secs 
-        app.run_polling(poll_interval=1)
 
 if __name__ == "__main__":
     print("Starting Bot...")
     BOT = TrendyBot(update=None, context=None)  # Passing None for update and context as they're not used in __init__
-    BOT.run()
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler('start', BOT.start_command))
+    app.add_handler(CommandHandler('help', BOT.help_command))
+    app.add_handler(CommandHandler('analyze', BOT.analyze_command))
+
+    # Register message handler
+    app.add_handler(MessageHandler(filters.TEXT, BOT.handle_message))
+
+    # Register error handler
+    app.add_error_handler(BOT.error)
+
+    # Start polling for updates // checks every 1 sec
+    app.run_polling(poll_interval=1)
